@@ -13,7 +13,8 @@ class PaymentController extends Controller
     public function payment(): void
     {
         // Mail::to(Auth::user()->email, Auth::user()->name)->send(new PaymentMail(Auth::user()));
-        PaymentJob::dispatch(Auth::user())->delay(now()->addSeconds(5));
+        PaymentJob::dispatch(Auth::user())->delay(now()->addSeconds(5))
+            ->onQueue('payments');
         echo 'Enviado';
     }
 }

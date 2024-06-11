@@ -28,6 +28,6 @@ class PaymentJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->user->name, $this->user->name)->send(new PaymentMail($this->user));
+        Mail::to($this->user->email, $this->user->name)->send(new PaymentMail($this->user));
     }
 }
