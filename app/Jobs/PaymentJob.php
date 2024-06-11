@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class PaymentJob implements ShouldQueue
@@ -31,6 +32,11 @@ class PaymentJob implements ShouldQueue
         if ($this->attempts() >= 3) {
             $this->release(1);
         }
-        Mail::to($this->user->name, $this->user->name)->send(new PaymentMail($this->user));
+        Mail::to($this->user->email, $this->user->name)->send(new PaymentMail($this->user));
+    }
+
+    public function failed(): void
+    {
+        Log::error('Payment failed for user: ' . $this->user->name);
     }
 }
